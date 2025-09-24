@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "name": "WSL-Fedora-ARM64-GCC15",
+      "includePath": [
+        "/home/Cervelen/code",
+        "/home/Cervelen/code/**",
+        "/usr/lib/gcc/aarch64-redhat-linux/15/include",
+        "/usr/include/c++/15",
+        "/usr/include/c++/15/aarch64-redhat-linux",
+        "/usr/include/c++/15/backward",
+        "/usr/local/include",
+        "/usr/include"
+      ],
+      "compilerPath": "/usr/bin/g++",
+      "cStandard": "c17",
+      "cppStandard": "c++20",
+      "intelliSenseMode": "linux-gcc-arm64"
+    }
+  ],
+  "version": 4
+}
