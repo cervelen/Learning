@@ -21,13 +21,29 @@
             for (int i = 0; i < predictions.size(); i++){
                 error += ((labels[i]-predictions[i])*(labels[i]-predictions[i]));
             }
-            return error;
+            return error/labels.size();
             return 0;
+        }
+
+        double reluderivative(double &z){
+            if (z > 0){
+                return 1;
+            }
+            else{
+                return 0;
+            }
         }
 
     //loss functions and stuff above
     //perceptron below
-
+        double singlerelu(double input){
+            if (input < 0){
+                return 0;
+            }
+            else{
+                return input;
+            }
+        }
         std::vector<double> relu(std::vector<double> inputvec){
             std::vector<double> outputvec;
             for (int i = 0; i < inputvec.size(); i++){
@@ -92,10 +108,10 @@
             this->layers.resize(layersizes.size()-1);
 
             for (int i = 1; i < (layersizes.size()-1); i++){
-                this->layers[i-1].emplace_back(Perceptron(1, learningrate, nofunction));
+                this->layers[i-1].emplace_back(Perceptron(layersizes[0], learningrate, nofunction));
             }
             for (int i = 1; i < layersizes[layersizes.size()-1]; i++){
-                this->layers[layersizes.size()-1].emplace_back(Perceptron(1, learningrate, nofunction));
+                this->layers[layersizes.size()-1].emplace_back(Perceptron(layers[i-1].size(), learningrate, nofunction));
             }
         }
 
@@ -119,11 +135,41 @@
         }
 
         void Mlp::train(const std::vector<std::vector<double>>& trainingdata, const std::vector<std::vector<double>>& labels, const int epochs){
-            std::vector<double> labels;
-            double error = 0;
+            double prediction = 0;
+            double error;
+            std::vector<std::vector<double>> preactivationvalues;
+            std::vector<std::vector<double>> outputvalues;
             for (int i = 0; i < epochs; i++){
                 for (int j = 0; j < labels.size(); j++){
-                    error = mse(predict(trainingdata[j]), labels[j]);
+                    prediction = predict(trainingdata[j])[0];   //make prediction
+                    for (int k = 0; k < layers[0].size(); k++){
+                        preactivationvalues[0].push_back(layers[0][k].predict(trainingdata[j]));
+                        outputvalues[0].push_back(singlerelu(preactivationvalues[0][k]));
+                    }
+                    for (int k = 1; k < layers.size(); k++){
+                        for (int l = 0; l < layers[k].size(); l++){
+                            preactivationvalues[k].push_back(layers[k][l].predict(outputvalues[k-1]));
+                            outputvalues[k].push_back(preactivationvalues[k][l]);
+                        }
+                    }
+                    
+
+                    for (int k = layers[layers.size()-1].size()-1; k >= 0; k--){ //iterating backwards through the last layer's neurons, because it is funny.
+                        error = (outputvalues[layers.size()-1][k] - labels[j][k])*reluderivative(preactivationvalues[layers.size()-1][k]);
+                        for (int l = layers[layers.size()-1][k].weights.size()-1; l >= 0; l--){ //iterating, again backwards, through each neuron's weights, because it is funny.
+                            layers[layers.size()-1][k].weights[l] = layers[layers.size()-1][k].weights[l] - learningrate * error * outputvalues[layers.size()][k];
+                        }
+                        layers[layers.size()][k].bias = layers[layers.size()][k].bias - learningrate * error;
+                    }
+                    for (int k = layers.size()-2; k >= 0; k--){
+                        for (int l = layers[k].size()-1; l >= 0; l--){ //iterating backwards through each layers neurons, because it is funny.
+                            error = 0;
+                            for (int m = layers[k+1].size()-1; m >= 0k m--){
+                                error += layers[k+1][m].weights[k]*errors[k+1][m]
+                            }
+                            error = reluderivative(preactivationvalues[k][l])*error;
+                        }
+                    }
                 }
             }
         }
