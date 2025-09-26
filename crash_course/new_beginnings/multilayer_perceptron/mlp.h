@@ -5,20 +5,17 @@
 
 std::vector<double> softmax(std::vector<double> inputvec);
 double mse(std::vector<double> predictions, std::vector<double> labels);
-std::vector<double> relu(std::vector<double> inputvec){
-
-}
+std::vector<double> relu(std::vector<double> inputvec);
+double reluderivative(double &z);
 
 class Perceptron{
-    private:
+    public:
         std::vector<double> weights;
         double bias;
         double learningrate;
         std::function<double(double)> activation;
 
-    public:
         Perceptron(int inputsize, double learningrate, std::function<double(double)> activation);
-
         double predict(const std::vector<double>& inputs);
         void Perceptron::train(const std::vector<std::vector<double>>& trainingdata, const std::vector<double>& labels, int& epochs);
 
