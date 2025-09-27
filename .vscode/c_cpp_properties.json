@@ -1,21 +1,22 @@
 {
   "configurations": [
     {
-      "name": "WSL-Fedora-ARM64-GCC15",
+      "name": "Ubuntu-24.04-GCC13-x86_64",
       "includePath": [
-        "/home/Cervelen/code",
-        "/home/Cervelen/code/**",
-        "/usr/lib/gcc/aarch64-redhat-linux/15/include",
-        "/usr/include/c++/15",
-        "/usr/include/c++/15/aarch64-redhat-linux",
-        "/usr/include/c++/15/backward",
+        "${workspaceFolder}",
+        "${workspaceFolder}/**",
+        "/usr/include/c++/13",
+        "/usr/include/x86_64-linux-gnu/c++/13",
+        "/usr/include/c++/13/backward",
+        "/usr/lib/gcc/x86_64-linux-gnu/13/include",
         "/usr/local/include",
+        "/usr/include/x86_64-linux-gnu",
         "/usr/include"
       ],
       "compilerPath": "/usr/bin/g++",
       "cStandard": "c17",
       "cppStandard": "c++20",
-      "intelliSenseMode": "linux-gcc-arm64"
+      "intelliSenseMode": "linux-gcc-x64"
     }
   ],
   "version": 4
