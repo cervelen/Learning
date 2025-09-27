@@ -1,7 +1,6 @@
 {
   "configurations": [
     {
- salkj ;
       "name": "Ubuntu-24.04-GCC13-x86_64",
       "includePath": [
         "${workspaceFolder}",
