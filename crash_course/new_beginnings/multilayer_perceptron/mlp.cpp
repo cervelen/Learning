@@ -137,6 +137,10 @@
         void Mlp::train(const std::vector<std::vector<double>>& trainingdata, const std::vector<std::vector<double>>& labels, const int epochs){
             double prediction = 0;
             double error;
+            std::vector<std::vector<double>> errors;
+            for (int i = 0; i < layers.size()-1; i++){
+                errors.push_back({});
+            }
             std::vector<std::vector<double>> preactivationvalues;
             std::vector<std::vector<double>> outputvalues;
             for (int i = 0; i < epochs; i++){
@@ -156,6 +160,7 @@
 
                     for (int k = layers[layers.size()-1].size()-1; k >= 0; k--){ //iterating backwards through the last layer's neurons, because it is funny.
                         error = (outputvalues[layers.size()-1][k] - labels[j][k])*reluderivative(preactivationvalues[layers.size()-1][k]);
+                        errors[k].push_back(error); //ok the backwards iteration makes this terrible.
                         for (int l = layers[layers.size()-1][k].weights.size()-1; l >= 0; l--){ //iterating, again backwards, through each neuron's weights, because it is funny.
                             layers[layers.size()-1][k].weights[l] = layers[layers.size()-1][k].weights[l] - learningrate * error * outputvalues[layers.size()][k];
                         }
@@ -164,10 +169,15 @@
                     for (int k = layers.size()-2; k >= 0; k--){
                         for (int l = layers[k].size()-1; l >= 0; l--){ //iterating backwards through each layers neurons, because it is funny.
                             error = 0;
-                            for (int m = layers[k+1].size()-1; m >= 0k m--){
-                                error += layers[k+1][m].weights[k]*errors[k+1][m]
+                            for (int m = layers[k+1].size()-1; m >= 0; m--){
+                                error += layers[k+1][m].weights[k]*errors[k+1][layers[k+1].size() - m - 1];
                             }
                             error = reluderivative(preactivationvalues[k][l])*error;
+                            errors[k].push_back(error);
+                            for (int m = layers[k][l].weights.size(); m >= 0; m--){
+                                layers[k][l].weights[m] = layers[k][l].weights[m] - learningrate * error * outputvalues[k-1][m];
+                            }
+                            layers[k][l].bias = layers[k][l].bias - learningrate * error;
                         }
                     }
                 }
@@ -177,5 +187,7 @@
 
 
 int main(){
-    return 0;
+    std::vector<int> layersizes = {500, 100, 100, 1};
+    double learningrate = 0.0001;
+    Mlp mlp = Mlp(layersizes, learningrate);
 }

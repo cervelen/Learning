@@ -2,6 +2,7 @@
 #define MLP_H
 
 #include <vector>
+#include <functional>
 
 std::vector<double> softmax(std::vector<double> inputvec);
 double mse(std::vector<double> predictions, std::vector<double> labels);
