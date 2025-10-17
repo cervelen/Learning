@@ -164,8 +164,8 @@
                     for (int k = layers.size()-2; k >= 0; k--){
                         for (int l = layers[k].size()-1; l >= 0; l--){ //iterating backwards through each layers neurons, because it is funny.
                             error = 0;
-                            for (int m = layers[k+1].size()-1; m >= 0k m--){
-                                error += layers[k+1][m].weights[k]*errors[k+1][m]
+                            for (int m = layers[k+1].size()-1; m >= 0; m--){
+                                error += layers[k+1][m].weights[k]*errors[k+1][m];
                             }
                             error = reluderivative(preactivationvalues[k][l])*error;
                         }
